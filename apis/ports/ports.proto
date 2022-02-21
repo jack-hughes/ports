@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package ports.v1;
+
+option go_package = "github.com/jack-hughes/ports/pkg/apis/ports";
+
+service Ports {
+  rpc Update(stream Request) returns (Response) {}
+  rpc Get(Request) returns (Response) {}
+  rpc List(Request) returns (Response) {}
+}
+
+message Request {
+  string Name = 1;
+  string City = 2;
+  string Country = 3;
+  repeated string Alias = 4;
+  repeated string Regions = 5;
+  repeated float Coordinates = 6;
+  string Province = 7;
+  string Timezone = 8;
+  repeated string Unlocs = 9;
+  string Code = 10;
+}
+
+message Response {
+  string Todo = 1;
+}
