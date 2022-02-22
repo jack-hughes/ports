@@ -3,13 +3,16 @@ package main
 import (
 	"context"
 	"flag"
+	"github.com/gorilla/mux"
 	"github.com/jack-hughes/ports/cmd/client/options"
+	"github.com/jack-hughes/ports/internal/client/handlers"
 	"github.com/jack-hughes/ports/internal/client/service"
 	"github.com/jack-hughes/ports/internal/client/stream"
 	"github.com/jack-hughes/ports/pkg/apis/ports"
 	"google.golang.org/grpc"
 	"log"
 	"net"
+	"net/http"
 )
 
 func main() {
@@ -24,9 +27,9 @@ func main() {
 	}
 
 	s := stream.NewJSONStream()
-	c, err := service.NewPortsClient(ctx, conn)
+	c, err := service.NewService(ctx, conn)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("failed to create service")
 	}
 	go func() {
 		for data := range s.Watch() {
@@ -34,7 +37,8 @@ func main() {
 				log.Fatal("failure to read file - exiting")
 			}
 
-			err := c.Update(ctx, &ports.Request{
+			err := c.Update(ctx, &ports.Port{
+				ID:          data.ID,
 				Name:        data.Port.Name,
 				City:        data.Port.City,
 				Country:     data.Port.Country,
@@ -58,4 +62,11 @@ func main() {
 	}()
 
 	s.Start("test/testdata/ports.json")
+
+	r := mux.NewRouter()
+	r.HandleFunc("/ports", handlers.List(ctx, c)).Methods(http.MethodGet)
+	r.HandleFunc("/ports/{port_id}", handlers.Get(ctx, c)).Methods(http.MethodGet)
+
+	log.Println("serving...")
+	log.Fatal(http.ListenAndServe(net.JoinHostPort(opts.HTTPServer, opts.HTTPPort), r))
 }

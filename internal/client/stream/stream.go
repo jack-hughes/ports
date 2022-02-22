@@ -49,20 +49,17 @@ func (s Stream) Start(path string) {
 		return
 	}
 
-	i := 1
 	for decoder.More() {
-		_, err = decoder.Token()
+		tkn, err := decoder.Token()
 		if err != nil {
 			s.stream <- types.PortStream{Error: fmt.Errorf("decode opening delimiter: %w", err)}
 		}
 		var port types.Port
 		if err := decoder.Decode(&port); err != nil {
-			s.stream <- types.PortStream{Error: fmt.Errorf("decode line %d: %w", i, err)}
+			s.stream <- types.PortStream{Error: fmt.Errorf("decode line failure %w", err)}
 			return
 		}
-		s.stream <- types.PortStream{Port: port}
-
-		i++
+		s.stream <- types.PortStream{ID: fmt.Sprintf("%s", tkn), Port: port}
 	}
 
 	if _, err := decoder.Token(); err != nil {
