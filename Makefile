@@ -1,5 +1,9 @@
 .PHONY: test build proto
 
+race:
+	mkdir -p artifacts
+	go test -race -short -cover -count 1 -coverprofile=artifacts/coverage.txt -covermode=atomic ./...
+
 generate:
 	go mod tidy
 	go mod vendor
