@@ -11,7 +11,6 @@ import (
 	"io"
 )
 
-//go:generate go run -mod=mod github.com/golang/mock/mockgen -source=./service.go -package=mocks -destination=../../../test/mocks/ports_client_mocks.go
 type PortClient interface {
 	Update(ctx context.Context, port types.Port) error
 	Get(ctx context.Context, id string) (types.Port, error)
@@ -19,6 +18,7 @@ type PortClient interface {
 	CloseAndRecv() (*empty.Empty, error)
 }
 
+//go:generate go run -mod=mod github.com/golang/mock/mockgen -package mocks -source=../../../pkg/apis/ports/ports_grpc.pb.go -destination=../../../test/mocks/grpc_mocks.go -build_flags=-mod=mod
 type Service struct {
 	client ports.PortsClient
 	stream ports.Ports_UpdateClient
@@ -42,8 +42,6 @@ func NewService(ctx context.Context, conn grpc.ClientConnInterface, log *zap.Log
 
 func (s Service) Update(ctx context.Context, port *ports.Port) error {
 	s.log.Debug(fmt.Sprintf("incoming update with port ID: %v", port.ID))
-	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
 
 	if err := s.stream.Send(port); err != nil {
 		s.log.Error("failed to send to stream: %v", zap.Error(err))
@@ -76,7 +74,7 @@ func (s Service) List(ctx context.Context) ([]types.Port, error) {
 	done := make(chan bool)
 	go func() {
 		for {
-			s.log.Debug("receiving ports...")
+			s.log.Debug("receiving ports")
 			p, err := stream.Recv()
 			if err == io.EOF {
 				s.log.Debug("end of ports stream")
@@ -85,7 +83,6 @@ func (s Service) List(ctx context.Context) ([]types.Port, error) {
 			}
 			if err != nil {
 				s.log.Error("failed to receive port: %v", zap.Error(err))
-				return
 			}
 
 			pSlice = append(pSlice, types.Clone(p))

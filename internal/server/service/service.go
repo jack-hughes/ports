@@ -11,7 +11,6 @@ import (
 	"io"
 )
 
-//go:generate go run -mod=mod github.com/golang/mock/mockgen -package mocks -source=../../../pkg/apis/ports/ports_grpc.pb.go -destination=../../../test/mocks/ports_server_mocks.go -build_flags=-mod=mod
 type PortsServer struct {
 	ports.UnimplementedPortsServer
 

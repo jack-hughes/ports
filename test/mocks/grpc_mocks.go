@@ -12,6 +12,7 @@ import (
 	ports "github.com/jack-hughes/ports/pkg/apis/ports"
 	grpc "google.golang.org/grpc"
 	metadata "google.golang.org/grpc/metadata"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // MockPortsClient is a mock of PortsClient interface.
@@ -38,14 +39,14 @@ func (m *MockPortsClient) EXPECT() *MockPortsClientMockRecorder {
 }
 
 // Get mocks base method.
-func (m *MockPortsClient) Get(ctx context.Context, in *ports.Request, opts ...grpc.CallOption) (*ports.Response, error) {
+func (m *MockPortsClient) Get(ctx context.Context, in *ports.GetPortRequest, opts ...grpc.CallOption) (*ports.Port, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "Get", varargs...)
-	ret0, _ := ret[0].(*ports.Response)
+	ret0, _ := ret[0].(*ports.Port)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -58,14 +59,14 @@ func (mr *MockPortsClientMockRecorder) Get(ctx, in interface{}, opts ...interfac
 }
 
 // List mocks base method.
-func (m *MockPortsClient) List(ctx context.Context, in *ports.Request, opts ...grpc.CallOption) (*ports.Response, error) {
+func (m *MockPortsClient) List(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (ports.Ports_ListClient, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, in}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
 	ret := m.ctrl.Call(m, "List", varargs...)
-	ret0, _ := ret[0].(*ports.Response)
+	ret0, _ := ret[0].(ports.Ports_ListClient)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -121,10 +122,10 @@ func (m *MockPorts_UpdateClient) EXPECT() *MockPorts_UpdateClientMockRecorder {
 }
 
 // CloseAndRecv mocks base method.
-func (m *MockPorts_UpdateClient) CloseAndRecv() (*ports.Response, error) {
+func (m *MockPorts_UpdateClient) CloseAndRecv() (*emptypb.Empty, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CloseAndRecv")
-	ret0, _ := ret[0].(*ports.Response)
+	ret0, _ := ret[0].(*emptypb.Empty)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -193,7 +194,7 @@ func (mr *MockPorts_UpdateClientMockRecorder) RecvMsg(m interface{}) *gomock.Cal
 }
 
 // Send mocks base method.
-func (m *MockPorts_UpdateClient) Send(arg0 *ports.Request) error {
+func (m *MockPorts_UpdateClient) Send(arg0 *ports.Port) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Send", arg0)
 	ret0, _ := ret[0].(error)
@@ -234,6 +235,129 @@ func (mr *MockPorts_UpdateClientMockRecorder) Trailer() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Trailer", reflect.TypeOf((*MockPorts_UpdateClient)(nil).Trailer))
 }
 
+// MockPorts_ListClient is a mock of Ports_ListClient interface.
+type MockPorts_ListClient struct {
+	ctrl     *gomock.Controller
+	recorder *MockPorts_ListClientMockRecorder
+}
+
+// MockPorts_ListClientMockRecorder is the mock recorder for MockPorts_ListClient.
+type MockPorts_ListClientMockRecorder struct {
+	mock *MockPorts_ListClient
+}
+
+// NewMockPorts_ListClient creates a new mock instance.
+func NewMockPorts_ListClient(ctrl *gomock.Controller) *MockPorts_ListClient {
+	mock := &MockPorts_ListClient{ctrl: ctrl}
+	mock.recorder = &MockPorts_ListClientMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockPorts_ListClient) EXPECT() *MockPorts_ListClientMockRecorder {
+	return m.recorder
+}
+
+// CloseSend mocks base method.
+func (m *MockPorts_ListClient) CloseSend() error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CloseSend")
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CloseSend indicates an expected call of CloseSend.
+func (mr *MockPorts_ListClientMockRecorder) CloseSend() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CloseSend", reflect.TypeOf((*MockPorts_ListClient)(nil).CloseSend))
+}
+
+// Context mocks base method.
+func (m *MockPorts_ListClient) Context() context.Context {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Context")
+	ret0, _ := ret[0].(context.Context)
+	return ret0
+}
+
+// Context indicates an expected call of Context.
+func (mr *MockPorts_ListClientMockRecorder) Context() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Context", reflect.TypeOf((*MockPorts_ListClient)(nil).Context))
+}
+
+// Header mocks base method.
+func (m *MockPorts_ListClient) Header() (metadata.MD, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Header")
+	ret0, _ := ret[0].(metadata.MD)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Header indicates an expected call of Header.
+func (mr *MockPorts_ListClientMockRecorder) Header() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Header", reflect.TypeOf((*MockPorts_ListClient)(nil).Header))
+}
+
+// Recv mocks base method.
+func (m *MockPorts_ListClient) Recv() (*ports.Port, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Recv")
+	ret0, _ := ret[0].(*ports.Port)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Recv indicates an expected call of Recv.
+func (mr *MockPorts_ListClientMockRecorder) Recv() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Recv", reflect.TypeOf((*MockPorts_ListClient)(nil).Recv))
+}
+
+// RecvMsg mocks base method.
+func (m_2 *MockPorts_ListClient) RecvMsg(m interface{}) error {
+	m_2.ctrl.T.Helper()
+	ret := m_2.ctrl.Call(m_2, "RecvMsg", m)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// RecvMsg indicates an expected call of RecvMsg.
+func (mr *MockPorts_ListClientMockRecorder) RecvMsg(m interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RecvMsg", reflect.TypeOf((*MockPorts_ListClient)(nil).RecvMsg), m)
+}
+
+// SendMsg mocks base method.
+func (m_2 *MockPorts_ListClient) SendMsg(m interface{}) error {
+	m_2.ctrl.T.Helper()
+	ret := m_2.ctrl.Call(m_2, "SendMsg", m)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SendMsg indicates an expected call of SendMsg.
+func (mr *MockPorts_ListClientMockRecorder) SendMsg(m interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendMsg", reflect.TypeOf((*MockPorts_ListClient)(nil).SendMsg), m)
+}
+
+// Trailer mocks base method.
+func (m *MockPorts_ListClient) Trailer() metadata.MD {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Trailer")
+	ret0, _ := ret[0].(metadata.MD)
+	return ret0
+}
+
+// Trailer indicates an expected call of Trailer.
+func (mr *MockPorts_ListClientMockRecorder) Trailer() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Trailer", reflect.TypeOf((*MockPorts_ListClient)(nil).Trailer))
+}
+
 // MockPortsServer is a mock of PortsServer interface.
 type MockPortsServer struct {
 	ctrl     *gomock.Controller
@@ -258,10 +382,10 @@ func (m *MockPortsServer) EXPECT() *MockPortsServerMockRecorder {
 }
 
 // Get mocks base method.
-func (m *MockPortsServer) Get(arg0 context.Context, arg1 *ports.Request) (*ports.Response, error) {
+func (m *MockPortsServer) Get(arg0 context.Context, arg1 *ports.GetPortRequest) (*ports.Port, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", arg0, arg1)
-	ret0, _ := ret[0].(*ports.Response)
+	ret0, _ := ret[0].(*ports.Port)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -273,12 +397,11 @@ func (mr *MockPortsServerMockRecorder) Get(arg0, arg1 interface{}) *gomock.Call 
 }
 
 // List mocks base method.
-func (m *MockPortsServer) List(arg0 context.Context, arg1 *ports.Request) (*ports.Response, error) {
+func (m *MockPortsServer) List(arg0 *emptypb.Empty, arg1 ports.Ports_ListServer) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", arg0, arg1)
-	ret0, _ := ret[0].(*ports.Response)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	ret0, _ := ret[0].(error)
+	return ret0
 }
 
 // List indicates an expected call of List.
@@ -386,10 +509,10 @@ func (mr *MockPorts_UpdateServerMockRecorder) Context() *gomock.Call {
 }
 
 // Recv mocks base method.
-func (m *MockPorts_UpdateServer) Recv() (*ports.Request, error) {
+func (m *MockPorts_UpdateServer) Recv() (*ports.Port, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Recv")
-	ret0, _ := ret[0].(*ports.Request)
+	ret0, _ := ret[0].(*ports.Port)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -415,7 +538,7 @@ func (mr *MockPorts_UpdateServerMockRecorder) RecvMsg(m interface{}) *gomock.Cal
 }
 
 // SendAndClose mocks base method.
-func (m *MockPorts_UpdateServer) SendAndClose(arg0 *ports.Response) error {
+func (m *MockPorts_UpdateServer) SendAndClose(arg0 *emptypb.Empty) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SendAndClose", arg0)
 	ret0, _ := ret[0].(error)
@@ -480,4 +603,123 @@ func (m *MockPorts_UpdateServer) SetTrailer(arg0 metadata.MD) {
 func (mr *MockPorts_UpdateServerMockRecorder) SetTrailer(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetTrailer", reflect.TypeOf((*MockPorts_UpdateServer)(nil).SetTrailer), arg0)
+}
+
+// MockPorts_ListServer is a mock of Ports_ListServer interface.
+type MockPorts_ListServer struct {
+	ctrl     *gomock.Controller
+	recorder *MockPorts_ListServerMockRecorder
+}
+
+// MockPorts_ListServerMockRecorder is the mock recorder for MockPorts_ListServer.
+type MockPorts_ListServerMockRecorder struct {
+	mock *MockPorts_ListServer
+}
+
+// NewMockPorts_ListServer creates a new mock instance.
+func NewMockPorts_ListServer(ctrl *gomock.Controller) *MockPorts_ListServer {
+	mock := &MockPorts_ListServer{ctrl: ctrl}
+	mock.recorder = &MockPorts_ListServerMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockPorts_ListServer) EXPECT() *MockPorts_ListServerMockRecorder {
+	return m.recorder
+}
+
+// Context mocks base method.
+func (m *MockPorts_ListServer) Context() context.Context {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Context")
+	ret0, _ := ret[0].(context.Context)
+	return ret0
+}
+
+// Context indicates an expected call of Context.
+func (mr *MockPorts_ListServerMockRecorder) Context() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Context", reflect.TypeOf((*MockPorts_ListServer)(nil).Context))
+}
+
+// RecvMsg mocks base method.
+func (m_2 *MockPorts_ListServer) RecvMsg(m interface{}) error {
+	m_2.ctrl.T.Helper()
+	ret := m_2.ctrl.Call(m_2, "RecvMsg", m)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// RecvMsg indicates an expected call of RecvMsg.
+func (mr *MockPorts_ListServerMockRecorder) RecvMsg(m interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RecvMsg", reflect.TypeOf((*MockPorts_ListServer)(nil).RecvMsg), m)
+}
+
+// Send mocks base method.
+func (m *MockPorts_ListServer) Send(arg0 *ports.Port) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Send", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Send indicates an expected call of Send.
+func (mr *MockPorts_ListServerMockRecorder) Send(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Send", reflect.TypeOf((*MockPorts_ListServer)(nil).Send), arg0)
+}
+
+// SendHeader mocks base method.
+func (m *MockPorts_ListServer) SendHeader(arg0 metadata.MD) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SendHeader", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SendHeader indicates an expected call of SendHeader.
+func (mr *MockPorts_ListServerMockRecorder) SendHeader(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendHeader", reflect.TypeOf((*MockPorts_ListServer)(nil).SendHeader), arg0)
+}
+
+// SendMsg mocks base method.
+func (m_2 *MockPorts_ListServer) SendMsg(m interface{}) error {
+	m_2.ctrl.T.Helper()
+	ret := m_2.ctrl.Call(m_2, "SendMsg", m)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SendMsg indicates an expected call of SendMsg.
+func (mr *MockPorts_ListServerMockRecorder) SendMsg(m interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendMsg", reflect.TypeOf((*MockPorts_ListServer)(nil).SendMsg), m)
+}
+
+// SetHeader mocks base method.
+func (m *MockPorts_ListServer) SetHeader(arg0 metadata.MD) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SetHeader", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SetHeader indicates an expected call of SetHeader.
+func (mr *MockPorts_ListServerMockRecorder) SetHeader(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetHeader", reflect.TypeOf((*MockPorts_ListServer)(nil).SetHeader), arg0)
+}
+
+// SetTrailer mocks base method.
+func (m *MockPorts_ListServer) SetTrailer(arg0 metadata.MD) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "SetTrailer", arg0)
+}
+
+// SetTrailer indicates an expected call of SetTrailer.
+func (mr *MockPorts_ListServerMockRecorder) SetTrailer(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetTrailer", reflect.TypeOf((*MockPorts_ListServer)(nil).SetTrailer), arg0)
 }

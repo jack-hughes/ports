@@ -14,7 +14,7 @@ import (
 	"net"
 )
 
-const AppName = "ports-client"
+const AppName = "port-domain-service"
 
 func main() {
 	opts := options.DefaultOptions

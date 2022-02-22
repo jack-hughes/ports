@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 )
 
+//go:generate go run -mod=mod github.com/golang/mock/mockgen -package mocks -source=./storage.go -destination=../../../test/mocks/storage_mocks.go -build_flags=-mod=mod
 type Storage interface {
 	Update(port types.Port) types.Port
 	Get(portID string) (types.Port, error)
@@ -13,14 +14,14 @@ type Storage interface {
 }
 
 type Store struct {
-	db types.InMemStore
+	db  types.InMemStore
 	log *zap.Logger
 }
 
 func NewStorage(log *zap.Logger) Storage {
 	return Store{
-		db: types.InMemStore{Ports: make(map[string]types.Port)},
-		log:   log.With(zap.String("component", "storage")),
+		db:  types.InMemStore{Ports: make(map[string]types.Port)},
+		log: log.With(zap.String("component", "storage")),
 	}
 }
 

@@ -18,14 +18,14 @@ type Streamer interface {
 // Stream contains the channel for PortStream objects
 type Stream struct {
 	stream chan types.PortStream
-	log *zap.Logger
+	log    *zap.Logger
 }
 
 // NewJSONStream instantiates the new PortStream channel
 func NewJSONStream(log *zap.Logger) Stream {
 	return Stream{
 		stream: make(chan types.PortStream),
-		log: log.With(zap.String("component", "stream")),
+		log:    log.With(zap.String("component", "stream")),
 	}
 }
 

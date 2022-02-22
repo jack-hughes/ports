@@ -18,14 +18,13 @@ import (
 	"net/http"
 )
 
-const AppName = "ports-client"
+const AppName = "ports-client-api"
 
 func main() {
 	opts := options.DefaultOptions
 	opts.FillOptionsUsingFlags(flag.CommandLine)
 	flag.Parse()
 	ctx := context.TODO()
-
 
 	log := logger.NewZapLogger(AppName, zapcore.Level(opts.LogLevel))
 	conn, err := grpc.Dial(net.JoinHostPort(opts.GRPCServer, opts.GRPCPort), grpc.WithInsecure(), grpc.WithBlock())
