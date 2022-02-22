@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/jack-hughes/ports/cmd/server/options"
 	"github.com/jack-hughes/ports/internal/server/service"
+	"github.com/jack-hughes/ports/internal/server/storage"
 	"github.com/jack-hughes/ports/pkg/apis/ports"
 	"google.golang.org/grpc"
 	"log"
@@ -23,7 +24,8 @@ func main() {
 	}
 
 	srv := grpc.NewServer()
-	svc := service.New()
+	store := storage.NewStorage()
+	svc := service.New(store)
 	ports.RegisterPortsServer(srv, svc)
 
 	log.Println(fmt.Sprintf("listening on %s", addr))
