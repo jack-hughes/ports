@@ -1,39 +1,47 @@
 package storage
 
 import (
+	"fmt"
 	types "github.com/jack-hughes/ports/internal"
-	"log"
+	"go.uber.org/zap"
 )
 
 type Storage interface {
 	Update(port types.Port) types.Port
-	Get(portID string) types.Port
+	Get(portID string) (types.Port, error)
 	List() []types.Port
 }
 
 type Store struct {
 	db types.InMemStore
+	log *zap.Logger
 }
 
-func NewStorage() Storage {
-	return Store{db: types.InMemStore{
-		Ports: make(map[string]types.Port),
-	}}
+func NewStorage(log *zap.Logger) Storage {
+	return Store{
+		db: types.InMemStore{Ports: make(map[string]types.Port)},
+		log:   log.With(zap.String("component", "storage")),
+	}
 }
 
 func (s Store) Update(port types.Port) types.Port {
 	s.db.Ports[port.ID] = port
+	s.log.Debug(fmt.Sprintf("port updated: %v", port.ID))
 	return s.db.Ports[port.ID]
 }
 
-func (s Store) Get(portID string) types.Port {
-	return s.db.Ports[portID]
+func (s Store) Get(portID string) (types.Port, error) {
+	for _, v := range s.db.Ports {
+		if v.ID == portID {
+			return v, nil
+		}
+	}
+	return types.Port{}, fmt.Errorf("could not find port with id: %v", portID)
 }
 
 func (s Store) List() []types.Port {
 	var list []types.Port
 	for _, v := range s.db.Ports {
-		log.Println("hitting")
 		list = append(list, v)
 	}
 	return list

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	types "github.com/jack-hughes/ports/internal"
+	"go.uber.org/zap"
 	"os"
 )
 
@@ -17,23 +18,27 @@ type Streamer interface {
 // Stream contains the channel for PortStream objects
 type Stream struct {
 	stream chan types.PortStream
+	log *zap.Logger
 }
 
 // NewJSONStream instantiates the new PortStream channel
-func NewJSONStream() Stream {
+func NewJSONStream(log *zap.Logger) Stream {
 	return Stream{
 		stream: make(chan types.PortStream),
+		log: log.With(zap.String("component", "stream")),
 	}
 }
 
 // Watch returns the contents of the stream
 func (s Stream) Watch() <-chan types.PortStream {
+	s.log.Debug("starting to watch")
 	return s.stream
 }
 
 // Start opens a file and begins to decode the JSON object at the first delimiter. The decoder will step through each
 // Port element, send it on the channel and exit when no more exist within the file
 func (s Stream) Start(path string) {
+	s.log.Debug(fmt.Sprintf("streaming file contents %v", path))
 	defer close(s.stream)
 
 	file, err := os.Open(path)

@@ -11,6 +11,9 @@ type Options struct {
 	// HTTP Server options
 	HTTPServer string
 	HTTPPort   string
+
+	FilePath string
+	LogLevel int
 }
 
 // DefaultOptions for the server
@@ -20,6 +23,11 @@ var DefaultOptions = Options{
 
 	HTTPServer: "localhost",
 	HTTPPort:   "8181",
+
+	FilePath: "test/testdata/ports.json",
+
+	// Default to debug logs
+	LogLevel: -1,
 }
 
 // FillOptionsUsingFlags fill options from the command line / default options.
@@ -29,4 +37,7 @@ func (o *Options) FillOptionsUsingFlags(flags *flag.FlagSet) {
 
 	flags.StringVar(&o.HTTPServer, "http-server", DefaultOptions.HTTPServer, "host that the gRPC server should use on the local interface")
 	flags.StringVar(&o.HTTPPort, "http-port", DefaultOptions.HTTPPort, "port that the gRPC server should use on the local interface")
+
+	flags.StringVar(&o.FilePath, "filepath", DefaultOptions.FilePath, "filepath for the document to load")
+	flags.IntVar(&o.LogLevel, "log-level", DefaultOptions.LogLevel, "the log level for the application")
 }
