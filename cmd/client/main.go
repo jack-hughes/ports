@@ -14,6 +14,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"net"
 	"net/http"
 	"os"
@@ -29,7 +30,6 @@ func main() {
 	opts := options.DefaultOptions
 	opts.FillOptionsUsingFlags(flag.CommandLine)
 	flag.Parse()
-	ctx := context.TODO()
 
 	log := logger.NewZapLogger(AppName, zapcore.Level(opts.LogLevel))
 	log.Debug("booting...")
@@ -44,7 +44,11 @@ func main() {
 		cancel()
 	}()
 
-	conn, err := grpc.Dial(net.JoinHostPort(opts.GRPCServer, opts.GRPCPort), grpc.WithInsecure(), grpc.WithBlock())
+	conn, err := grpc.Dial(
+		net.JoinHostPort(opts.GRPCServer, opts.GRPCPort),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithBlock(),
+	)
 	if err != nil {
 		log.Fatal("failed to connect to server: %v", zap.Error(err))
 	}
