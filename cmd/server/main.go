@@ -22,6 +22,7 @@ func main() {
 	flag.Parse()
 
 	log := logger.NewZapLogger(AppName, zapcore.Level(opts.LogLevel))
+	log.Debug("booting...")
 	addr := net.JoinHostPort(opts.GRPCServer, opts.GRPCPort)
 	lis, err := net.Listen("tcp", addr)
 	if err != nil {

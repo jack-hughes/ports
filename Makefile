@@ -17,12 +17,24 @@ proto:
 		apis/ports/ports.proto
 
 run-client:
-	go run cmd/client/main.go
+	go run cmd/client/main.go --grpc-server=localhost --http-server=localhost --filepath=./test/testdata/ports.json
 
 run-server:
-	go run cmd/server/main.go
+	go run cmd/server/main.go --grpc-server=localhost
 
 build: generate
 	mkdir -p bin
 	go build -o bin/client/client ./cmd/client
 	go build -o bin/server/server ./cmd/server
+
+up:
+	docker-compose up -d --build
+
+down:
+	docker-compose kill
+
+logs:
+	docker-compose logs -t -f
+
+integration:
+	./scripts/integration.sh
