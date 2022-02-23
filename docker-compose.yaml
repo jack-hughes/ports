@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  ports-domain-service:
+    container_name: ports-domain-service
+    hostname: ports-domain-service
+    build:
+      context: .
+      dockerfile: server.Dockerfile
+    ports:
+      - "50085:50085"
+    expose:
+      - "50085"
+    depends_on:
+      - "ports-client-api"
+  ports-client-api:
+    container_name: ports-client-api
+    build:
+      context: .
+      dockerfile: client.Dockerfile
+#    volumes:
+#      - ${PWD}/test/testdata/ports.json:/test/ports.json
+    ports:
+      - "8181:8181"
+    expose:
+      - "8181"

@@ -27,6 +27,7 @@ func main() {
 	ctx := context.TODO()
 
 	log := logger.NewZapLogger(AppName, zapcore.Level(opts.LogLevel))
+	log.Debug("booting...")
 	conn, err := grpc.Dial(net.JoinHostPort(opts.GRPCServer, opts.GRPCPort), grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
 		log.Fatal("failed to connect to server: %v", zap.Error(err))

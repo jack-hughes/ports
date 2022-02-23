@@ -13,7 +13,7 @@ type Options struct {
 
 // DefaultOptions for the server
 var DefaultOptions = Options{
-	GRPCServer: "localhost",
+	GRPCServer: "",
 	GRPCPort:   "50085",
 
 	// Default to debug logs

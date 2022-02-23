@@ -18,13 +18,13 @@ type Options struct {
 
 // DefaultOptions for the server
 var DefaultOptions = Options{
-	GRPCServer: "localhost",
+	GRPCServer: "ports-domain-service",
 	GRPCPort:   "50085",
 
-	HTTPServer: "localhost",
+	HTTPServer: "",
 	HTTPPort:   "8181",
 
-	FilePath: "test/testdata/ports.json",
+	FilePath: "/test/ports.json",
 
 	// Default to debug logs
 	LogLevel: -1,
