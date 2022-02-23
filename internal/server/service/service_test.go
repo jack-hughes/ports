@@ -16,6 +16,7 @@ import (
 )
 
 var errFoo = fmt.Errorf("some-error")
+
 func TestService_New(t *testing.T) {
 	t.Run("test new successfully", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
@@ -87,7 +88,7 @@ func TestService_Get(t *testing.T) {
 	}
 	tests := []table{
 		{
-			name: "successfully retrieve a record from storage",
+			name:    "successfully retrieve a record from storage",
 			portReq: &ports.GetPortRequest{ID: "test-port-id"},
 			expCalls: func(tt table, st *mocks.MockStorage) {
 				st.EXPECT().Get(tt.portReq.ID).Return(getTestInternalPort(), nil)
@@ -95,7 +96,7 @@ func TestService_Get(t *testing.T) {
 			err: nil,
 		},
 		{
-			name: "fail to retrieve a record from storage",
+			name:    "fail to retrieve a record from storage",
 			portReq: &ports.GetPortRequest{ID: "test-port-id"},
 			expCalls: func(tt table, st *mocks.MockStorage) {
 				st.EXPECT().Get(tt.portReq.ID).Return(getTestInternalPort(), errFoo)
@@ -119,7 +120,7 @@ func TestService_Get(t *testing.T) {
 			if tt.err != nil {
 				require.Error(t, err)
 				assert.Equal(t, tt.err, err)
-			}  else {
+			} else {
 				assert.IsType(t, &ports.Port{}, port)
 				assert.Equal(t, getTestGRPCPort(), port)
 			}
@@ -178,7 +179,6 @@ func TestService_List(t *testing.T) {
 		})
 	}
 }
-
 
 func getTestGRPCPort() *ports.Port {
 	return &ports.Port{
