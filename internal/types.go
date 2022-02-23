@@ -2,20 +2,19 @@ package types
 
 import "github.com/jack-hughes/ports/pkg/apis/ports"
 
+// InMemStore is a map of Ports with the key as the port ID
 type InMemStore struct {
 	Ports map[string]Port
 }
 
+// PortStream to receive ports and errors on
 type PortStream struct {
 	ID    string
 	Port  Port
 	Error error
 }
 
-type Error struct {
-	Error string `json:"error"`
-}
-
+// Port a representation of port details
 type Port struct {
 	ID          string    `json:"id"`
 	Name        string    `json:"name"`
@@ -30,6 +29,7 @@ type Port struct {
 	Code        string    `json:"code"`
 }
 
+// Clone turns a gRPC specific type into an internal port type
 func Clone(req *ports.Port) Port {
 	return Port{
 		ID:          req.ID,
@@ -46,6 +46,7 @@ func Clone(req *ports.Port) Port {
 	}
 }
 
+// ToTransit turns an internal type into a gRPC specific port type
 func ToTransit(req Port) *ports.Port {
 	return &ports.Port{
 		ID:          req.ID,

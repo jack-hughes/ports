@@ -14,6 +14,7 @@ import (
 	"net"
 )
 
+// AppName constant provided to logger
 const AppName = "port-domain-service"
 
 func main() {

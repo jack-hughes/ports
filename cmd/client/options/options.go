@@ -12,7 +12,11 @@ type Options struct {
 	HTTPServer string
 	HTTPPort   string
 
+	// The path of the file to decode and send for storage
 	FilePath string
+
+	// Log levels in line with Zap
+	// See here: https://github.com/uber-go/zap/blob/master/level.go
 	LogLevel int
 }
 

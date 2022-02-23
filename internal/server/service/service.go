@@ -11,6 +11,8 @@ import (
 	"io"
 )
 
+// PortsServer embeds the unimplemented ports server and provides access to gRPC function calls,
+// alongside a storage interface to interact with the database
 type PortsServer struct {
 	ports.UnimplementedPortsServer
 
@@ -45,6 +47,7 @@ func (s *PortsServer) Update(stream ports.Ports_UpdateServer) error {
 	}
 }
 
+// Get retrieves a single port from storage
 func (s *PortsServer) Get(ctx context.Context, p *ports.GetPortRequest) (*ports.Port, error) {
 	s.log.Debug(fmt.Sprintf("attempting to retrieve port entry for id: %v", p.ID))
 
@@ -58,6 +61,7 @@ func (s *PortsServer) Get(ctx context.Context, p *ports.GetPortRequest) (*ports.
 	return types.ToTransit(port), nil
 }
 
+// List returns retrieves all ports from storage
 func (s *PortsServer) List(e *empty.Empty, srv ports.Ports_ListServer) error {
 	s.log.Debug("attempting to list all ports")
 	l := s.store.List()
