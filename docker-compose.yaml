@@ -17,8 +17,6 @@ services:
     build:
       context: .
       dockerfile: client.Dockerfile
-#    volumes:
-#      - ${PWD}/test/testdata/ports.json:/test/ports.json
     ports:
       - "8181:8181"
     expose:

@@ -38,7 +38,7 @@ down:
 	docker-compose kill
 
 logs:
-	docker-compose logs -t -f
+	docker-compose logs -t
 
 integration:
 	./scripts/integration.sh
