@@ -11,13 +11,8 @@ import (
 	"io"
 )
 
-type PortClient interface {
-	Update(ctx context.Context, port types.Port) error
-	Get(ctx context.Context, id string) (types.Port, error)
-	List(ctx context.Context) ([]types.Port, error)
-	CloseAndRecv() (*empty.Empty, error)
-}
-
+// Service contains objects required by the service to opertate. In this case,
+// the client to interact with and the stream to send updates on
 //go:generate go run -mod=mod github.com/golang/mock/mockgen -package mocks -source=../../../pkg/apis/ports/ports_grpc.pb.go -destination=../../../test/mocks/grpc_mocks.go -build_flags=-mod=mod
 type Service struct {
 	client ports.PortsClient
@@ -25,6 +20,7 @@ type Service struct {
 	log    *zap.Logger
 }
 
+// NewService instantiates a new service with a gRPC client client connection and logger
 func NewService(ctx context.Context, conn grpc.ClientConnInterface, log *zap.Logger) (Service, error) {
 	c := ports.NewPortsClient(conn)
 
@@ -40,6 +36,7 @@ func NewService(ctx context.Context, conn grpc.ClientConnInterface, log *zap.Log
 	}, nil
 }
 
+// Update a record on the remote server, if it doesn't exist, create it
 func (s Service) Update(ctx context.Context, port *ports.Port) error {
 	s.log.Debug(fmt.Sprintf("incoming update with port ID: %v", port.ID))
 
@@ -51,6 +48,7 @@ func (s Service) Update(ctx context.Context, port *ports.Port) error {
 	return nil
 }
 
+// Get an individual record from the remote server
 func (s Service) Get(ctx context.Context, id string) (types.Port, error) {
 	s.log.Debug(fmt.Sprintf("attempting to get port for ID: %v", id))
 	resp, err := s.client.Get(ctx, &ports.GetPortRequest{ID: id})
@@ -62,6 +60,7 @@ func (s Service) Get(ctx context.Context, id string) (types.Port, error) {
 	return types.Clone(resp), nil
 }
 
+// List all records in storage
 func (s Service) List(ctx context.Context) ([]types.Port, error) {
 	s.log.Debug("attempting to list all available ports")
 	stream, err := s.client.List(ctx, &empty.Empty{})
@@ -93,6 +92,7 @@ func (s Service) List(ctx context.Context) ([]types.Port, error) {
 	return pSlice, nil
 }
 
+// CloseAndRecv closes the stream
 func (s Service) CloseAndRecv() (*empty.Empty, error) {
 	s.log.Debug("closing stream")
 	return s.stream.CloseAndRecv()

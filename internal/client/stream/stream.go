@@ -43,32 +43,33 @@ func (s Stream) Start(path string) {
 
 	file, err := os.Open(path)
 	if err != nil {
-		s.stream <- types.PortStream{Error: fmt.Errorf("open file: %w", err)}
+		s.stream <- types.PortStream{Error: fmt.Errorf("open file: %v", err)}
 		return
 	}
 	defer file.Close()
 
 	decoder := json.NewDecoder(file)
 	if _, err := decoder.Token(); err != nil {
-		s.stream <- types.PortStream{Error: fmt.Errorf("decode opening delimiter: %w", err)}
+		s.stream <- types.PortStream{Error: fmt.Errorf("decode opening delimiter: %v", err)}
 		return
 	}
 
 	for decoder.More() {
 		tkn, err := decoder.Token()
 		if err != nil {
-			s.stream <- types.PortStream{Error: fmt.Errorf("decode opening delimiter: %w", err)}
+			s.stream <- types.PortStream{Error: fmt.Errorf("decode opening delimiter: %v", err)}
+			return
 		}
 		var port types.Port
 		if err := decoder.Decode(&port); err != nil {
-			s.stream <- types.PortStream{Error: fmt.Errorf("decode line failure %w", err)}
+			s.stream <- types.PortStream{Error: fmt.Errorf("decode line failure %v", err)}
 			return
 		}
 		s.stream <- types.PortStream{ID: fmt.Sprintf("%s", tkn), Port: port}
 	}
 
 	if _, err := decoder.Token(); err != nil {
-		s.stream <- types.PortStream{Error: fmt.Errorf("decode closing delimiter: %w", err)}
+		s.stream <- types.PortStream{Error: fmt.Errorf("decode closing delimiter: %v", err)}
 		return
 	}
 }

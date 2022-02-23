@@ -15,8 +15,7 @@ import (
 	"testing"
 )
 
-var someErr = fmt.Errorf("some-error")
-
+var errFoo = fmt.Errorf("some-error")
 func TestService_New(t *testing.T) {
 	t.Run("test new successfully", func(t *testing.T) {
 		ctrl := gomock.NewController(t)
@@ -49,9 +48,9 @@ func TestService_Update(t *testing.T) {
 		{
 			name: "fail to recv a record",
 			expCalls: func(tt table, st *mocks.MockStorage, ms *mocks.MockPorts_UpdateServer) {
-				ms.EXPECT().Recv().Return(getTestGRPCPort(), someErr)
+				ms.EXPECT().Recv().Return(getTestGRPCPort(), errFoo)
 			},
-			err: someErr,
+			err: errFoo,
 		},
 	}
 	for _, tt := range tests {
@@ -99,9 +98,9 @@ func TestService_Get(t *testing.T) {
 			name: "fail to retrieve a record from storage",
 			portReq: &ports.GetPortRequest{ID: "test-port-id"},
 			expCalls: func(tt table, st *mocks.MockStorage) {
-				st.EXPECT().Get(tt.portReq.ID).Return(getTestInternalPort(), someErr)
+				st.EXPECT().Get(tt.portReq.ID).Return(getTestInternalPort(), errFoo)
 			},
-			err: someErr,
+			err: errFoo,
 		},
 	}
 	for _, tt := range tests {
@@ -151,9 +150,9 @@ func TestService_List(t *testing.T) {
 			expCalls: func(tt table, st *mocks.MockStorage, ls *mocks.MockPorts_ListServer) {
 				st.EXPECT().List().Return(getMultipleInternalPorts())
 				ls.EXPECT().Send(gomock.Any()).Return(nil)
-				ls.EXPECT().Send(gomock.Any()).Return(someErr)
+				ls.EXPECT().Send(gomock.Any()).Return(errFoo)
 			},
-			err: someErr,
+			err: errFoo,
 		},
 	}
 	for _, tt := range tests {

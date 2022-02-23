@@ -12,8 +12,6 @@ import (
 	"testing"
 )
 
-var someErr = fmt.Errorf("some-error")
-
 func TestStorage_NewStorage(t *testing.T) {
 	t.Run("test new successfully", func(t *testing.T) {
 		store := NewStorage(zap.NewNop())

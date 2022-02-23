@@ -10,6 +10,7 @@ import (
 	"net/http"
 )
 
+// Get returns a JSON body for a singular port
 func Get(ctx context.Context, svc service.Service, log *zap.Logger) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log = log.With(zap.String("component", "handler"))
@@ -45,6 +46,7 @@ func Get(ctx context.Context, svc service.Service, log *zap.Logger) func(http.Re
 	}
 }
 
+// List returns a JSON body for all ports
 func List(ctx context.Context, svc service.Service, log *zap.Logger) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log = log.With(zap.String("component", "handler"))

@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-var someErr = fmt.Errorf("some-error")
+var errFoo = fmt.Errorf("some-error")
 
 func TestService_Update(t *testing.T) {
 	type table struct {
@@ -41,9 +41,9 @@ func TestService_Update(t *testing.T) {
 				ID: "test-port-id",
 			},
 			expCalls: func(tt table, m *mocks.MockPorts_UpdateClient) {
-				m.EXPECT().Send(tt.req).Return(someErr)
+				m.EXPECT().Send(tt.req).Return(errFoo)
 			},
-			err: someErr,
+			err: errFoo,
 		},
 	}
 	for _, tt := range tests {
@@ -95,9 +95,9 @@ func TestService_Get(t *testing.T) {
 			stringID: "test-port-id",
 			id:       &ports.GetPortRequest{ID: "test-port-id"},
 			expCalls: func(tt table, m *mocks.MockPortsClient) {
-				m.EXPECT().Get(tt.ctx, tt.id).Return(getTestGRPCPort(), someErr)
+				m.EXPECT().Get(tt.ctx, tt.id).Return(getTestGRPCPort(), errFoo)
 			},
-			err: someErr,
+			err: errFoo,
 		},
 	}
 	for _, tt := range tests {
@@ -154,9 +154,9 @@ func TestService_List(t *testing.T) {
 			ctx:  context.TODO(),
 			port: getTestGRPCPort(),
 			expCalls: func(tt table, c *mocks.MockPortsClient, listClient *mocks.MockPorts_ListClient) {
-				c.EXPECT().List(tt.ctx, gomock.Any()).Return(listClient, someErr)
+				c.EXPECT().List(tt.ctx, gomock.Any()).Return(listClient, errFoo)
 			},
-			err: someErr,
+			err: errFoo,
 		},
 		{
 			name: "fail on recv",
@@ -164,7 +164,7 @@ func TestService_List(t *testing.T) {
 			port: getTestGRPCPort(),
 			expCalls: func(tt table, c *mocks.MockPortsClient, listClient *mocks.MockPorts_ListClient) {
 				c.EXPECT().List(tt.ctx, gomock.Any()).Return(listClient, nil)
-				listClient.EXPECT().Recv().Return(tt.port, someErr)
+				listClient.EXPECT().Recv().Return(tt.port, errFoo)
 				listClient.EXPECT().Recv().Return(tt.port, nil)
 				listClient.EXPECT().Recv().Return(tt.port, io.EOF)
 			},
