@@ -3,7 +3,6 @@
 [![CI](https://github.com/jack-hughes/ports/actions/workflows/ci.yml/badge.svg)](https://github.com/jack-hughes/ports/actions/workflows/ci.yml)
 
 ## About
-
 Ports is made up of two services. The first, the `port-client-service`, is responsible for parsing a JSON file of pre-determined structure (containing, coincidentally, information on shipping ports). When the application parses this file it sends each chunk on a gRPC stream to be stored in memory within the second service, the `ports-domain-service`. Once this is completed, a HTTP server is exposed on the client service that allows users to query the ingested data held in the `ports-domain-service`.
 
 ## Installation 
