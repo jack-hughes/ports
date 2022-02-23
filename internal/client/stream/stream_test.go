@@ -67,21 +67,21 @@ func TestStream_Start(t *testing.T) {
 		go func() {
 			for data := range s.Watch() {
 				assert.Equal(t, types.Port{
-					Name:        "Ajman",
-					City:        "Ajman",
-					Country:     "United Arab Emirates",
-					Alias:       []string{},
-					Regions:     []string{},
+					Name:    "Ajman",
+					City:    "Ajman",
+					Country: "United Arab Emirates",
+					Alias:   []string{},
+					Regions: []string{},
 					Coordinates: []float32{
 						55.5136433,
 						25.4052165,
 					},
-					Province:    "Ajman",
-					Timezone:    "Asia/Dubai",
-					Unlocs:      []string{
+					Province: "Ajman",
+					Timezone: "Asia/Dubai",
+					Unlocs: []string{
 						"AEAJM",
 					},
-					Code:        "52000",
+					Code: "52000",
 				}, data.Port)
 			}
 		}()
