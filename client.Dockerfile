@@ -3,7 +3,7 @@ WORKDIR /build
 COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o ports-client-api /build/cmd/client/
 
-FROM alpine:3.15.0
+FROM alpine:3.15.1
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
 COPY --from=builder /build/ports-client-api /bin
